@@ -1,0 +1,54 @@
+<html lang="en-us" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <title>Event Booking page - Welcome and choose an Event</title>
+    <style>
+        body {
+            width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Welcome to our Event Booking App</h1>
+</header>
+<main>
+    <form th:method="GET" th:action="@{/}">
+        <h4>Search Events</h4>
+        <label for="search">Search by name and description:
+            <input type="text" id="search" name="search" placeholder="Name and Desc">
+        </label>
+        <label for="rating">Search by rating:
+            <input type="number" id="rating" name="rating" step="0.1" min="1" max="10" placeholder="Rating">
+        </label>
+
+        <input type="submit" value="Search">
+        <a th:href="@{/}">Reset</a>
+    </form>
+    <br>
+    <form th:method="POST" th:action="@{/}">
+        <h2>Choose an event:</h2>
+        <div th:each="event: ${events}">
+            <label>
+                <input type="radio" name="eventName" th:value="${event.name}">
+            </label> Name: <span id="nameEvent" th:text="${event.name}"></span>
+            , Description: <span th:text="${event.description}"></span> ,
+            Rating: <span th:text="${event.popularityScore}"></span>
+        </div>
+        <h2>Choose number of tickets:</h2>
+        <label>
+            <input type="number" name="numTickets" min="1" max="10">
+        </label>
+
+        <input type="submit" value="Submit">
+        <br>
+        <h2>User:</h2>
+        <label for="attendee">
+            <input type="text" id="attendee" name="attendeeName" placeholder="Name">
+        </label>
+    </form>
+
+</main>
+</body>
+</html>
