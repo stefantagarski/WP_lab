@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import mk.finki.ukim.mk.lab.model.EventBooking;
 import mk.finki.ukim.mk.lab.service.EventService;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -56,10 +57,11 @@ public class EventListServlet extends HttpServlet {
         String eventName = req.getParameter("eventName");
         String numTickets = req.getParameter("numTickets");
         String attendeeName = req.getParameter("attendeeName");
+        String attendeeAddress = req.getParameter("attendeeAddress");
 
-        req.getSession().setAttribute("eventName", eventName);
-        req.getSession().setAttribute("numTickets", numTickets);
-        req.getSession().setAttribute("attendeeName", attendeeName);
+        EventBooking eventBooking = new EventBooking(eventName, attendeeName, attendeeAddress, Long.parseLong(numTickets));
+
+        req.getSession().setAttribute("eventBooking", eventBooking);
         resp.sendRedirect("/eventBooking");
     }
 }

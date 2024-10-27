@@ -30,19 +30,20 @@
         </tr>
         <tr>
             <td><b>Attendee Name </b></td>
-            <td th:text="${session.attendeeName}"></td>
+            <td th:text="${session.eventBooking.attendeeName}"></td>
         </tr>
         <tr>
             <td><b>Client IP Address</b></td>
+<!--            <td th:text="${session.eventBooking.attendeeAddress}"></td>-->
             <td th:text="${ipAddress}"></td>
         </tr>
         <tr>
             <td><b>Booking for Event</b></td>
-            <td th:text="${session.eventName}"></td>
+            <td th:text="${session.eventBooking.eventName}"></td>
         </tr>
         <tr>
             <td><b>Number of tickets</b></td>
-            <td th:text="${session.numTickets}"></td>
+            <td th:text="${session.eventBooking.numberOfTickets}"></td>
         </tr>
     </table>
 </section>
