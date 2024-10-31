@@ -1,4 +1,4 @@
-<html lang="en-us" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <title>Event Booking page - Welcome and choose an Event</title>
@@ -23,6 +23,13 @@
             <input type="number" id="rating" name="rating" step="0.1" placeholder="Rating">
         </label>
 
+        <br>
+        <label for="category">Search by category:
+            <select id="category" name="category">
+                <option>All</option>
+                <option th:each="category: ${categories}" th:value="${category.name}" th:text="${category.name}"></option>
+            </select>
+
         <input type="submit" value="Search">
         <a th:href="@{/}">Reset</a>
     </form>
@@ -35,6 +42,7 @@
             </label> Name: <span id="nameEvent" th:text="${event.name}"></span>
             , Description: <span th:text="${event.description}"></span> ,
             Rating: <span th:text="${event.popularityScore}"></span>
+            Category: <span th:text="${event.category.name}"></span>
         </div>
         <h2>Choose number of tickets:</h2>
         <label>

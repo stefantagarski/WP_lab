@@ -5,7 +5,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import mk.finki.ukim.mk.lab.model.Category;
 import mk.finki.ukim.mk.lab.model.EventBooking;
+import mk.finki.ukim.mk.lab.service.CategoryService;
 import mk.finki.ukim.mk.lab.service.EventBookingService;
 import mk.finki.ukim.mk.lab.service.EventService;
 import org.thymeleaf.context.WebContext;
@@ -21,11 +23,13 @@ public class EventListServlet extends HttpServlet {
     private final EventService service;
     private final SpringTemplateEngine engine;
     private final EventBookingService eventBookingService;
+    private final CategoryService categoryService;
 
-    public EventListServlet(EventService service, SpringTemplateEngine engine, EventBookingService eventBookingService) {
+    public EventListServlet(EventService service, SpringTemplateEngine engine, EventBookingService eventBookingService, CategoryService categoryService) {
         this.service = service;
         this.engine = engine;
         this.eventBookingService = eventBookingService;
+        this.categoryService = categoryService;
     }
 
     @Override
@@ -37,36 +41,34 @@ public class EventListServlet extends HttpServlet {
 
         String search = req.getParameter("search");
         String rating = req.getParameter("rating");
+        String searchCat = req.getParameter("category");
 
-        // I don't know if it is a good practice, but it works :3
+        context.setVariable("categories", categoryService.listAll());
 
         if (search != null && !search.isEmpty() && rating != null && !rating.isEmpty()) {
             context.setVariable("events", service.searchByNameAndPopularityScore(search, Double.parseDouble(rating)));
-            engine.process("listEvents.html", context, resp.getWriter());
         } else if (search != null && !search.isEmpty()) {
             context.setVariable("events", service.searchEvents(search));
-            engine.process("listEvents.html", context, resp.getWriter());
         } else if (rating != null && !rating.isEmpty()) {
             context.setVariable("events", service.searchByPopularityScore(Double.parseDouble(rating)));
-            engine.process("listEvents.html", context, resp.getWriter());
-        }else {
+        } else if (searchCat != null && !searchCat.isEmpty()) {
+            context.setVariable("events", service.searchByCategory(new Category(searchCat)));
+        } else {
             context.setVariable("events", service.listAll());
-            engine.process("listEvents.html", context, resp.getWriter());
         }
 
+        engine.process("listEvents.html", context, resp.getWriter());
     }
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String eventName = req.getParameter("eventName");
-        String numTickets = req.getParameter("numTickets");
+        int numTickets = Integer.parseInt(req.getParameter("numTickets"));
         String attendeeName = req.getParameter("attendeeName");
         String attendeeAddress = req.getParameter("attendeeAddress");
 
-
-        EventBooking eventBooking = eventBookingService.placeBooking(eventName, attendeeName, attendeeAddress, Integer.parseInt(numTickets));
-
+        EventBooking eventBooking = eventBookingService.placeBooking(eventName, attendeeName, attendeeAddress, numTickets);
         req.getSession().setAttribute("eventBooking", eventBooking);
         resp.sendRedirect("/eventBooking");
     }
+
 }

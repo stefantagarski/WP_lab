@@ -1,5 +1,6 @@
 package mk.finki.ukim.mk.lab.service;
 
+import mk.finki.ukim.mk.lab.model.Category;
 import mk.finki.ukim.mk.lab.model.Event;
 
 import java.util.List;
@@ -14,5 +15,6 @@ public interface EventService {
 
     List<Event> searchByNameAndPopularityScore(String text, double rating);
 
+    List<Event> searchByCategory(Category category);
 
 }

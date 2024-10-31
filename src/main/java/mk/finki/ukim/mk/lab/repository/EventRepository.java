@@ -1,6 +1,7 @@
 package mk.finki.ukim.mk.lab.repository;
 
 import mk.finki.ukim.mk.lab.bootstrap.DataHolder;
+import mk.finki.ukim.mk.lab.model.Category;
 import mk.finki.ukim.mk.lab.model.Event;
 import org.springframework.stereotype.Repository;
 
@@ -30,6 +31,12 @@ public class EventRepository {
                 .filter(r -> (r.getName().toLowerCase().contains(text.toLowerCase())
                         || r.getDescription().toLowerCase().contains(text.toLowerCase()))
                         && r.getPopularityScore() >= rating)
+                .collect(Collectors.toList());
+    }
+
+    public List<Event> searchByCategory(Category category) {
+        return DataHolder.eventList.stream()
+                .filter(r -> r.getCategory().getName().toLowerCase().contains(category.getName().toLowerCase()))
                 .collect(Collectors.toList());
     }
 
