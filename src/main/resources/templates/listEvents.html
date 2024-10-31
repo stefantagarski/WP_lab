@@ -27,11 +27,13 @@
         <label for="category">Search by category:
             <select id="category" name="category">
                 <option>All</option>
-                <option th:each="category: ${categories}" th:value="${category.name}" th:text="${category.name}"></option>
+                <option th:each="category: ${categories}" th:value="${category.name}"
+                        th:text="${category.name}"></option>
             </select>
 
-        <input type="submit" value="Search">
-        <a th:href="@{/}">Reset</a>
+            <input type="submit" value="Search">
+            <a th:href="@{/}">Reset</a>
+        </label>
     </form>
     <br>
     <form th:method="POST" th:action="@{/}">
@@ -53,9 +55,9 @@
         <label for="attendee">
             <input type="text" id="attendee" name="attendeeName" placeholder="Name">
         </label>
-<!--        <label for="addressAttendee">-->
-<!--            <input type="text" id="addressAttendee" name="attendeeAddress" placeholder="Address">-->
-<!--        </label>-->
+        <!--        <label for="addressAttendee">-->
+        <!--            <input type="text" id="addressAttendee" name="attendeeAddress" placeholder="Address">-->
+        <!--        </label>-->
 
         <input type="submit" value="Submit">
     </form>
