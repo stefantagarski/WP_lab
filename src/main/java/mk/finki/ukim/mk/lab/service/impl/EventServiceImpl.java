@@ -31,4 +31,9 @@ public class EventServiceImpl implements EventService {
     public List<Event> searchByPopularityScore(double rating) {
         return repository.searchByRating(rating);
     }
+
+    @Override
+    public List<Event> searchByNameAndPopularityScore(String text, double rating) {
+        return repository.searchNameAndRating(text, rating);
+    }
 }

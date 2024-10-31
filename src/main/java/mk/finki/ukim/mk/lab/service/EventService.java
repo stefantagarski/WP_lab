@@ -12,4 +12,7 @@ public interface EventService {
 
     List<Event> searchByPopularityScore(double rating);
 
+    List<Event> searchByNameAndPopularityScore(String text, double rating);
+
+
 }

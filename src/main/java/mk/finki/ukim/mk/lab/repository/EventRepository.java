@@ -25,4 +25,12 @@ public class EventRepository {
         return DataHolder.eventList.stream().filter(r -> r.getPopularityScore() >= rating).collect(Collectors.toList());
     }
 
+    public List<Event> searchNameAndRating(String text, double rating) {
+        return DataHolder.eventList.stream()
+                .filter(r -> (r.getName().toLowerCase().contains(text.toLowerCase())
+                        || r.getDescription().toLowerCase().contains(text.toLowerCase()))
+                        && r.getPopularityScore() >= rating)
+                .collect(Collectors.toList());
+    }
+
 }
