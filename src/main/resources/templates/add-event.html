@@ -54,7 +54,7 @@
                 </div>
                 <div class="form-group">
                     <label>Category</label>
-                    <select name="category" class="form-control">
+                    <select name="categoryID" class="form-control">
                         <option th:if="${event} != null"
                                 th:selected="${event.getCategory() != null &&
                                 event.getCategory().getId() == cat.getId()}"
@@ -71,7 +71,7 @@
                 </div>
                 <div class="form-group">
                     <label>Location</label>
-                    <select name="location" class="form-control">
+                    <select name="locationID" class="form-control">
                         <option th:if="${event} != null"
                                 th:each="location : ${locations}"
                                 th:selected="${event.getLocation() != null &&

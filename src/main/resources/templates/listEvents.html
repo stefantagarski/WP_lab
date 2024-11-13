@@ -45,7 +45,7 @@
     <div>
         <form th:method="POST" th:action="@{/events/booking}">
             <h2>Choose an event:</h2>
-            <div th:each="event: ${eventList}" class="d-flex align-items-center">
+            <div style="margin: 9px; width: 100%" th:each="event: ${eventList}" class="d-flex align-items-center">
                 <label>
                     <input type="radio" name="eventName" th:value="${event.name}" required>
                     <span th:text="${event.name}">Event Name</span>,

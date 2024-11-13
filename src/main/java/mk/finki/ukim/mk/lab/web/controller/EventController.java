@@ -130,9 +130,9 @@ public class EventController {
     public String saveEvent(@RequestParam String name,
                             @RequestParam String description,
                             @RequestParam double popularityScore,
-                            @RequestParam Long category,
-                            @RequestParam Long location) {
-        eventService.saveOrUpdate(name, description, popularityScore, category, location);
+                            @RequestParam Long categoryID,
+                            @RequestParam Long locationID) {
+        eventService.saveOrUpdate(name, description, popularityScore, categoryID, locationID);
         return "redirect:/events";
     }
 
