@@ -1,6 +1,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>Event Booking page - Welcome and choose an Event</title>
     <style>
         body {
@@ -14,15 +15,20 @@
     <h1>Welcome to our Event Booking App</h1>
 </header>
 <main>
-    <form th:method="GET" th:action="@{/}">
+
+    <div th:if="${hasError}">
+        <h2 style="color: red" th:text="${error}"></h2>
+    </div>
+
+
+    <form th:method="GET" th:action="@{/events}">
         <h4>Search Events</h4>
         <label for="search">Search by name and description:
-            <input type="text" id="search" name="search" placeholder="Name and Desc">
+            <input type="text" id="search" name="searchND" placeholder="Name and Desc">
         </label>
         <label for="rating">Search by rating:
             <input type="number" id="rating" name="rating" step="0.1" placeholder="Rating">
         </label>
-
         <br>
         <label for="category">Search by category:
             <select id="category" name="category">
@@ -30,38 +36,53 @@
                 <option th:each="category: ${categories}" th:value="${category.name}"
                         th:text="${category.name}"></option>
             </select>
-
-            <input type="submit" value="Search">
-            <a th:href="@{/}">Reset</a>
         </label>
+        <input type="submit" value="Search">
+        <a th:href="@{/events}">Reset</a>
     </form>
     <br>
-    <form th:method="POST" th:action="@{/}">
-        <h2>Choose an event:</h2>
-        <div th:each="event: ${events}">
+
+    <div>
+        <form th:method="POST" th:action="@{/events/booking}">
+            <h2>Choose an event:</h2>
+            <div th:each="event: ${eventList}" class="d-flex align-items-center">
+                <label>
+                    <input type="radio" name="eventName" th:value="${event.name}" required>
+                    <span th:text="${event.name}">Event Name</span>,
+                    Desc: <span th:text="${event.description}">Description</span>,
+                    Popularity: <span th:text="${event.popularityScore}">0.0</span> ,
+                    Category: <span th:text="${event.category.name}">Category</span>,
+                    Location: <span th:text="${event.location.name}">Location</span>
+                </label>
+
+                <div style="margin: 10px"></div>
+                <a th:href="@{/events/delete-form/{id}(id=${event.id})}" class="btn btn-danger">Delete</a>
+
+                <div style="margin: 10px"></div>
+                <a th:href="@{/events/edit/{id}(id=${event.id})}" class="btn btn-info">Edit</a>
+            </div>
+            <br>
+
+
+            <div>
+                <a th:href="@{/events/add-form}" class="btn btn-secondary" style="width: 100%">Add new Event</a>
+            </div>
+            <br>
+
+
+            <h2>Choose number of tickets:</h2>
             <label>
-                <input type="radio" name="eventName" th:value="${event.name}">
-            </label> Name: <span id="nameEvent" th:text="${event.name}"></span>
-            , Description: <span th:text="${event.description}"></span> ,
-            Rating: <span th:text="${event.popularityScore}"></span>
-            Category: <span th:text="${event.category.name}"></span>
-        </div>
-        <h2>Choose number of tickets:</h2>
-        <label>
-            <input type="number" name="numTickets" min="1" max="10">
-        </label>
-        <br>
-        <h2>User:</h2>
-        <label for="attendee">
-            <input type="text" id="attendee" name="attendeeName" placeholder="Name">
-        </label>
-        <!--        <label for="addressAttendee">-->
-        <!--            <input type="text" id="addressAttendee" name="attendeeAddress" placeholder="Address">-->
-        <!--        </label>-->
-
-        <input type="submit" value="Submit">
-    </form>
-
+                <input type="number" name="numTickets" min="1" max="10" required>
+            </label>
+            <br>
+            <h2>User:</h2>
+            <label for="attendee">
+                <input type="text" id="attendee" name="attendeeName" placeholder="Name">
+            </label>
+            <br>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
 </main>
 </body>
 </html>

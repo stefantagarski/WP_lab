@@ -4,6 +4,7 @@ import mk.finki.ukim.mk.lab.model.Category;
 import mk.finki.ukim.mk.lab.model.Event;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface EventService {
@@ -16,5 +17,11 @@ public interface EventService {
     List<Event> searchByNameAndPopularityScore(String text, double rating);
 
     List<Event> searchByCategory(Category category);
+
+    Optional<Event> findById(Long id);
+
+    Optional<Event> saveOrUpdate(String name, String description, double popularityScore, Long categoryID, Long locationID);
+
+    void deleteById(Long id);
 
 }

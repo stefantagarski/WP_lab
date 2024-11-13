@@ -17,7 +17,7 @@ import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
 
-@WebServlet()
+@WebServlet(urlPatterns = "/servlet/events")
 public class EventListServlet extends HttpServlet {
 
     private final EventService service;
@@ -61,14 +61,14 @@ public class EventListServlet extends HttpServlet {
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String eventName = req.getParameter("eventName");
-        int numTickets = Integer.parseInt(req.getParameter("numTickets"));
-        String attendeeName = req.getParameter("attendeeName");
-        String attendeeAddress = req.getParameter("attendeeAddress");
-
-        EventBooking eventBooking = eventBookingService.placeBooking(eventName, attendeeName, attendeeAddress, numTickets);
-        req.getSession().setAttribute("eventBooking", eventBooking);
-        resp.sendRedirect("/eventBooking");
+//        String eventName = req.getParameter("eventName");
+//        int numTickets = Integer.parseInt(req.getParameter("numTickets"));
+//        String attendeeName = req.getParameter("attendeeName");
+//        String attendeeAddress = req.getParameter("attendeeAddress");
+//
+//        EventBooking eventBooking = eventBookingService.placeBooking(eventName, attendeeName, attendeeAddress, numTickets);
+//        req.getSession().setAttribute("eventBooking", eventBooking);
+//        resp.sendRedirect("/eventBooking");
     }
 
 }
