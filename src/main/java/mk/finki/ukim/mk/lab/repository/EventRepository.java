@@ -50,11 +50,15 @@ public class EventRepository {
         DataHolder.eventList.removeIf(r -> r.getId().equals(id));
     }
 
-    public Optional<Event> saveOrUpdate(String name, String description, double popularityScore, Category category, Location location) {
-        Event event = new Event(name, description, popularityScore, category, location);
+    public Optional<Event> saveOrUpdate(String name, String description, double popularityScore, Category category, Location location, int ticketCount) {
+        Event event = new Event(name, description, popularityScore, category, location, ticketCount);
         DataHolder.eventList.removeIf(r -> r.getName().equals(event.getName()));
         DataHolder.eventList.add(event);
         return Optional.of(event);
+    }
+
+    public Optional<Event> findByName(String name) {
+        return DataHolder.eventList.stream().filter(r -> r.getName().equals(name)).findFirst();
     }
 
 }

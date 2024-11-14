@@ -73,10 +73,15 @@ public class EventController {
                                @RequestParam int numTickets,
                                @RequestParam String attendeeName,
                                @RequestParam(required = false) String attendeeAddress,
-                               HttpSession session) {
+                               HttpSession session,
+                               Model model) {
         EventBooking eventBooking = eventBookingService.placeBooking(eventName, attendeeName
                 , attendeeAddress, numTickets);
         session.setAttribute("eventBooking", eventBooking);
+
+        Event event = eventService.findByName(eventName).get();
+        event.setTicketCount(event.getTicketCount() - numTickets);
+
         return "redirect:/eventBooking";
     }
 
@@ -131,8 +136,10 @@ public class EventController {
                             @RequestParam String description,
                             @RequestParam double popularityScore,
                             @RequestParam Long categoryID,
-                            @RequestParam Long locationID) {
-        eventService.saveOrUpdate(name, description, popularityScore, categoryID, locationID);
+                            @RequestParam Long locationID,
+                            @RequestParam int ticketCount) {
+
+        eventService.saveOrUpdate(name, description, popularityScore, categoryID, locationID, ticketCount);
         return "redirect:/events";
     }
 

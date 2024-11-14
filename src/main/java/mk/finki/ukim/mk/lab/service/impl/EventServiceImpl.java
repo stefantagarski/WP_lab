@@ -59,11 +59,16 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Optional<Event> saveOrUpdate(String name, String description, double popularityScore, Long categoryID, Long locationID) {
+    public Optional<Event> findByName(String name) {
+        return repository.findByName(name);
+    }
+
+    @Override
+    public Optional<Event> saveOrUpdate(String name, String description, double popularityScore, Long categoryID, Long locationID, int ticketCount) {
         Category category = categoryRepository.findById(categoryID).orElseThrow(NoCategoryFoundException::new);
         Location location = locationRepository.findById(locationID).orElseThrow(() -> new NoLocationIDFoundException(locationID));
 
-        return repository.saveOrUpdate(name, description, popularityScore, category, location);
+        return repository.saveOrUpdate(name, description, popularityScore, category, location, ticketCount);
     }
 
     @Override

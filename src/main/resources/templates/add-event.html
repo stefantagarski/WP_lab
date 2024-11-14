@@ -85,6 +85,15 @@
                                 th:text="${location.getName()}">
                         </option>
                     </select>
+                    <div class="form-group">
+                        <label for="quantity">Tickets Count</label>
+                        <input type="text"
+                               class="form-control"
+                               id="ticketCount"
+                               name="ticketCount"
+                               th:value="(${event} != null ? ${event.getTicketCount()} : '')"
+                               placeholder="Tickets Count">
+                    </div>
                 </div>
                 <button id="submit" type="submit" class="btn btn-primary">Submit</button>
                 <a type="button" class="btn btn-primary" href="/events">Back</a>

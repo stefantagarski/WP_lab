@@ -20,7 +20,9 @@ public interface EventService {
 
     Optional<Event> findById(Long id);
 
-    Optional<Event> saveOrUpdate(String name, String description, double popularityScore, Long categoryID, Long locationID);
+    Optional<Event> findByName(String name);
+
+    Optional<Event> saveOrUpdate(String name, String description, double popularityScore, Long categoryID, Long locationID, int ticketCount);
 
     void deleteById(Long id);
 
