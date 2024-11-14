@@ -73,16 +73,21 @@ public class EventController {
                                @RequestParam int numTickets,
                                @RequestParam String attendeeName,
                                @RequestParam(required = false) String attendeeAddress,
-                               HttpSession session,
-                               Model model) {
-        EventBooking eventBooking = eventBookingService.placeBooking(eventName, attendeeName
+                               HttpSession session) {
+        EventBooking eventBooking = eventBookingService.placeBooking(String.valueOf(eventName), attendeeName
                 , attendeeAddress, numTickets);
-        session.setAttribute("eventBooking", eventBooking);
+
 
         Event event = eventService.findByName(eventName).get();
-        event.setTicketCount(event.getTicketCount() - numTickets);
-
-        return "redirect:/eventBooking";
+        if (numTickets > event.getTicketCount()) {
+            return "redirect:/events?error=InvalidNumberOfTickets";
+        } else if (event.getTicketCount() == 0) {
+            return "redirect:/events?error=NoMoreTicketsAvailable";
+        } else {
+            session.setAttribute("eventBooking", eventBooking);
+            event.setTicketCount(event.getTicketCount() - numTickets);
+            return "redirect:/eventBooking";
+        }
     }
 
 
