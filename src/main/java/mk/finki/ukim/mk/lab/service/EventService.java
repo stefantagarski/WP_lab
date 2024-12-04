@@ -10,19 +10,23 @@ import java.util.Optional;
 public interface EventService {
     List<Event> listAll();
 
-    List<Event> searchEvents(String text);
+    List<Event> searchEventsByNameAndDesc(String name);
 
     List<Event> searchByPopularityScore(double rating);
 
     List<Event> searchByNameAndPopularityScore(String text, double rating);
 
-    List<Event> searchByCategory(Category category);
+    List<Event> searchByCategoryID(Long categoryID);
 
     Optional<Event> findById(Long id);
 
     Optional<Event> findByName(String name);
 
-    Optional<Event> saveOrUpdate(String name, String description, double popularityScore, Long categoryID, Long locationID, int ticketCount);
+    Optional<Event> save(String name, String description, double popularityScore, Long categoryID, Long locationID, int ticketCount);
+
+    Optional<Event> update(Long id, String name, String description, double popularityScore, Long categoryID, Long locationID, int ticketCount);
+
+    List<Event> findAllByLocationId(Long locationId);
 
     void deleteById(Long id);
 

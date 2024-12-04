@@ -33,8 +33,15 @@
         <label for="category">Search by category:
             <select id="category" name="category">
                 <option>All</option>
-                <option th:each="category: ${categories}" th:value="${category.name}"
+                <option th:each="category: ${categories}" th:value="${category.id}"
                         th:text="${category.name}"></option>
+            </select>
+        </label>
+        <label for="category">Search by location:
+            <select id="location" name="location">
+                <option>All</option>
+                <option th:each="location: ${locations}" th:value="${location.id}"
+                        th:text="${location.name}"></option>
             </select>
         </label>
         <input type="submit" value="Search">

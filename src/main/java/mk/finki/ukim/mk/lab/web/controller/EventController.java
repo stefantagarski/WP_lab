@@ -39,6 +39,7 @@ public class EventController {
                                 @RequestParam(required = false) String searchND,
                                 @RequestParam(required = false) String rating,
                                 @RequestParam(required = false) String category,
+                                @RequestParam(required = false) String location,
                                 Model model) {
 
         if (error != null && !error.isEmpty()) {
@@ -49,16 +50,21 @@ public class EventController {
         List<Category> categories = categoryService.listAll();
         model.addAttribute("categories", categories);
 
+        List<Location> locations = locationService.findAll();
+        model.addAttribute("locations", locations);
+
         List<Event> eventList;
 
         if (searchND != null && !searchND.isEmpty() && rating != null && !rating.isEmpty()) {
             eventList = eventService.searchByNameAndPopularityScore(searchND, Double.parseDouble(rating));
         } else if (searchND != null && !searchND.isEmpty()) {
-            eventList = eventService.searchEvents(searchND);
+            eventList = eventService.searchEventsByNameAndDesc(searchND);
         } else if (rating != null && !rating.isEmpty()) {
             eventList = eventService.searchByPopularityScore(Double.parseDouble(rating));
-        } else if (category != null && !category.isEmpty()) {
-            eventList = eventService.searchByCategory(new Category(category));
+        } else if (category != null && !category.equals("All")) {
+            eventList = eventService.searchByCategoryID(Long.parseLong(category));
+        } else if (location != null && !location.equals("All")) {
+            eventList = eventService.findAllByLocationId(Long.parseLong(location));
         } else {
             eventList = eventService.listAll();
         }
@@ -137,14 +143,19 @@ public class EventController {
     }
 
     @PostMapping("/add")
-    public String saveEvent(@RequestParam String name,
+    public String saveEvent(@RequestParam(required = false) Long id,
+                            @RequestParam String name,
                             @RequestParam String description,
                             @RequestParam double popularityScore,
                             @RequestParam Long categoryID,
                             @RequestParam Long locationID,
                             @RequestParam int ticketCount) {
 
-        eventService.saveOrUpdate(name, description, popularityScore, categoryID, locationID, ticketCount);
+        if (id != null) {
+            eventService.update(id, name, description, popularityScore, categoryID, locationID, ticketCount);
+        } else {
+            eventService.save(name, description, popularityScore, categoryID, locationID, ticketCount);
+        }
         return "redirect:/events";
     }
 
