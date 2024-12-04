@@ -25,6 +25,7 @@ public class Event {
 
     private int ticketCount;
 
+
     public Event(String name, String description, double popularityScore, Category category, Location location, int ticketCount) {
         this.name = name;
         this.description = description;

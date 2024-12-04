@@ -6,9 +6,6 @@ import mk.finki.ukim.mk.lab.model.Location;
 import mk.finki.ukim.mk.lab.model.exceptions.EventNotFoundException;
 import mk.finki.ukim.mk.lab.model.exceptions.NoCategoryFoundException;
 import mk.finki.ukim.mk.lab.model.exceptions.NoLocationIDFoundException;
-import mk.finki.ukim.mk.lab.repository.impl.InMemoryCategoryRepository;
-import mk.finki.ukim.mk.lab.repository.impl.InMemoryEventRepository;
-import mk.finki.ukim.mk.lab.repository.impl.InMemoryLocationRepository;
 import mk.finki.ukim.mk.lab.repository.jpa.CategoryRepository;
 import mk.finki.ukim.mk.lab.repository.jpa.EventRepository;
 import mk.finki.ukim.mk.lab.repository.jpa.LocationRepository;
@@ -81,9 +78,6 @@ public class EventServiceImpl implements EventService {
         Location location = locationRepository.findById(locationID)
                 .orElseThrow(() -> new NoLocationIDFoundException(locationID));
 
-        if (category.getId() == null) {
-            category = categoryRepository.save(category);
-        }
 
         Event event = new Event(name, description, popularityScore, category, location, ticketCount);
 

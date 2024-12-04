@@ -1,19 +1,14 @@
 package mk.finki.ukim.mk.lab.web.controller;
 
 import jakarta.servlet.http.HttpSession;
-import mk.finki.ukim.mk.lab.model.Category;
-import mk.finki.ukim.mk.lab.model.Event;
-import mk.finki.ukim.mk.lab.model.EventBooking;
-import mk.finki.ukim.mk.lab.model.Location;
-import mk.finki.ukim.mk.lab.service.CategoryService;
-import mk.finki.ukim.mk.lab.service.EventBookingService;
-import mk.finki.ukim.mk.lab.service.EventService;
-import mk.finki.ukim.mk.lab.service.LocationService;
+import mk.finki.ukim.mk.lab.model.*;
+import mk.finki.ukim.mk.lab.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/events")
@@ -23,14 +18,16 @@ public class EventController {
     private final CategoryService categoryService;
     private final LocationService locationService;
     private final EventBookingService eventBookingService;
+    private final UserService userService;
 
     public EventController(EventService eventService, CategoryService categoryService
             , LocationService locationService
-            , EventBookingService eventBookingService) {
+            , EventBookingService eventBookingService, UserService userService) {
         this.eventService = eventService;
         this.categoryService = categoryService;
         this.locationService = locationService;
         this.eventBookingService = eventBookingService;
+        this.userService = userService;
     }
 
 
@@ -53,6 +50,9 @@ public class EventController {
         List<Location> locations = locationService.findAll();
         model.addAttribute("locations", locations);
 
+        List<User> userList = userService.listAll();
+        model.addAttribute("userList", userList);
+
         List<Event> eventList;
 
         if (searchND != null && !searchND.isEmpty() && rating != null && !rating.isEmpty()) {
@@ -69,6 +69,7 @@ public class EventController {
             eventList = eventService.listAll();
         }
 
+
         model.addAttribute("eventList", eventList);
         return "listEvents";
     }
@@ -77,12 +78,11 @@ public class EventController {
     @PostMapping("/booking")
     public String placeBooking(@RequestParam String eventName,
                                @RequestParam int numTickets,
-                               @RequestParam String attendeeName,
-                               @RequestParam(required = false) String attendeeAddress,
+                               @RequestParam Long userListID,
                                HttpSession session) {
-        EventBooking eventBooking = eventBookingService.placeBooking(String.valueOf(eventName), attendeeName
-                , attendeeAddress, numTickets);
 
+
+        eventBookingService.placeBooking(eventName, userListID, numTickets);
 
         Event event = eventService.findByName(eventName).get();
         if (numTickets > event.getTicketCount()) {
@@ -90,7 +90,8 @@ public class EventController {
         } else if (event.getTicketCount() == 0) {
             return "redirect:/events?error=NoMoreTicketsAvailable";
         } else {
-            session.setAttribute("eventBooking", eventBooking);
+            //TODO DOMA da go popravam
+            //session.setAttribute("eventBooking", events);
             event.setTicketCount(event.getTicketCount() - numTickets);
             return "redirect:/eventBooking";
         }

@@ -85,9 +85,10 @@
             </label>
             <br>
             <h2>User:</h2>
-            <label for="attendee">
-                <input type="text" id="attendee" name="attendeeName" placeholder="Name">
-            </label>
+            <select id="users" name="userListID">
+                <option th:each="users: ${userList}" th:value="${users.id}"
+                        th:text="${users.name}"></option>
+            </select>
             <br>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
