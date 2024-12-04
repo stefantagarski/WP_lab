@@ -81,9 +81,6 @@ public class EventServiceImpl implements EventService {
         Location location = locationRepository.findById(locationID)
                 .orElseThrow(() -> new NoLocationIDFoundException(locationID));
 
-        if (category.getId() == null) {
-            category = categoryRepository.save(category);
-        }
 
         Event event = new Event(name, description, popularityScore, category, location, ticketCount);
 
