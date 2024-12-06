@@ -81,8 +81,7 @@ public class EventController {
                                @RequestParam Long userListID,
                                HttpSession session) {
 
-
-        eventBookingService.placeBooking(eventName, userListID, numTickets);
+        Optional<EventBooking> eventBooking = eventBookingService.placeBooking(eventName, userListID, numTickets);
 
         Event event = eventService.findByName(eventName).get();
         if (numTickets > event.getTicketCount()) {
@@ -90,9 +89,11 @@ public class EventController {
         } else if (event.getTicketCount() == 0) {
             return "redirect:/events?error=NoMoreTicketsAvailable";
         } else {
-            //TODO DOMA da go popravam
-            //session.setAttribute("eventBooking", events);
+            session.setAttribute("eventBooking", eventBooking.get());
             event.setTicketCount(event.getTicketCount() - numTickets);
+            eventService.update(event.getId(), event.getName(), event.getDescription()
+                    , event.getPopularityScore(), event.getCategory().getId()
+                    , event.getLocation().getId(), event.getTicketCount());
             return "redirect:/eventBooking";
         }
     }

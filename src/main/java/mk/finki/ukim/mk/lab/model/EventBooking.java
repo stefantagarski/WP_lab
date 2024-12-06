@@ -14,12 +14,12 @@ public class EventBooking {
     private Long id;
 
     private String eventName;
-    private Long numberOfTickets;
+    private int numberOfTickets;
 
     @ManyToOne
     private User user;
 
-    public EventBooking(String eventName, Long numberOfTickets, User user) {
+    public EventBooking(String eventName, int numberOfTickets, User user) {
         this.eventName = eventName;
         this.numberOfTickets = numberOfTickets;
         this.user = user;

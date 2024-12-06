@@ -3,6 +3,7 @@ package mk.finki.ukim.mk.lab.service.impl;
 import mk.finki.ukim.mk.lab.model.*;
 import mk.finki.ukim.mk.lab.model.exceptions.NoCategoryFoundException;
 import mk.finki.ukim.mk.lab.model.exceptions.NoLocationIDFoundException;
+import mk.finki.ukim.mk.lab.model.exceptions.NoUserIDFoundException;
 import mk.finki.ukim.mk.lab.repository.jpa.EventBookingRepository;
 import mk.finki.ukim.mk.lab.repository.jpa.UserRepository;
 import mk.finki.ukim.mk.lab.service.EventBookingService;
@@ -24,9 +25,9 @@ public class EventBookingServiceImpl implements EventBookingService {
     @Override
     public Optional<EventBooking> placeBooking(String eventName, Long userID, int numberOfTickets) {
 
-        User user = userRepository.findById(userID).orElse(null);
+        User user = userRepository.findById(userID).orElseThrow(() -> new NoUserIDFoundException(userID));
 
-        EventBooking eventBooking = new EventBooking(eventName, (long) numberOfTickets, user);
+        EventBooking eventBooking = new EventBooking(eventName, numberOfTickets, user);
 
         return Optional.of(eventBookingRepository.save(eventBooking));
     }

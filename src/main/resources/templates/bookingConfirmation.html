@@ -20,26 +20,23 @@
 <body>
 <section>
     <header>
-        <h1>Event Booking page - Booking confirmation </h1>
+        <h1>Event Booking page - Booking confirmation</h1>
     </header>
     <table>
         <tr>
-            <th colspan="2">
-                Your Booking Status
-            </th>
+            <th colspan="2">Your Booking Status</th>
         </tr>
         <tr>
-            <td><b>Attendee Name </b></td>
-            <td th:text="${session.eventBooking.getUserid()}"></td>
+            <td><b>Attendee Name</b></td>
+            <td th:text="${session.eventBooking.getUser().name}"></td>
         </tr>
         <tr>
             <td><b>Client IP Address</b></td>
-<!--            <td th:text="${session.eventBooking.attendeeAddress}"></td>-->
             <td th:text="${ipAddress}">0.0.0.1</td>
         </tr>
         <tr>
             <td><b>Booking for Event</b></td>
-            <td th:text="${session.eventBooking.getEventName()}"></td>
+            <td th:text="${session.eventBooking.eventName}"></td>
         </tr>
         <tr>
             <td><b>Number of tickets</b></td>
