@@ -1,8 +1,10 @@
 package mk.finki.ukim.mk.lab.web.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import mk.finki.ukim.mk.lab.model.*;
 import mk.finki.ukim.mk.lab.service.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/events")
+@RequestMapping({"/", "", "/events", "/home"})
 public class EventController {
 
     private final EventService eventService;
@@ -37,7 +39,8 @@ public class EventController {
                                 @RequestParam(required = false) String rating,
                                 @RequestParam(required = false) String category,
                                 @RequestParam(required = false) String location,
-                                Model model) {
+                                Model model,
+                                HttpServletRequest req) {
 
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
@@ -50,8 +53,12 @@ public class EventController {
         List<Location> locations = locationService.findAll();
         model.addAttribute("locations", locations);
 
-        List<User> userList = userService.listAll();
-        model.addAttribute("userList", userList);
+        //List<User> userList = userService.listAll();
+        //model.addAttribute("userList", userList);
+
+        String username = req.getRemoteUser();
+        model.addAttribute("userSignedIn", username);
+
 
         List<Event> eventList;
 
@@ -78,10 +85,13 @@ public class EventController {
     @PostMapping("/booking")
     public String placeBooking(@RequestParam String eventName,
                                @RequestParam int numTickets,
-                               @RequestParam Long userListID,
+                               @RequestParam String username,
                                HttpSession session) {
 
-        Optional<EventBooking> eventBooking = eventBookingService.placeBooking(eventName, userListID, numTickets);
+
+        Optional<User> user = userService.findByUsername(username);
+
+        Optional<EventBooking> eventBooking = eventBookingService.placeBooking(eventName, user.get().getId(), numTickets);
 
         Event event = eventService.findByName(eventName).get();
         if (numTickets > event.getTicketCount()) {
@@ -100,6 +110,7 @@ public class EventController {
 
 
     @GetMapping("/delete-form/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String getDeletePageForm(@PathVariable Long id, Model model) {
         Event event = eventService.findById(id).get();
         List<Location> locations = locationService.findAll();
@@ -113,12 +124,14 @@ public class EventController {
     }
 
     @PostMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteEvent(@PathVariable Long id) {
         eventService.deleteById(id);
         return "redirect:/events";
     }
 
     @GetMapping("/edit/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String editEvent(@PathVariable Long id, Model model) {
         if (eventService.findById(id).isPresent()) {
             Event event = eventService.findById(id).get();
@@ -135,6 +148,7 @@ public class EventController {
 
 
     @GetMapping("/add-form")
+    @PreAuthorize("hasRole('ADMIN')")
     public String getAddEventPage(Model model) {
         List<Location> locations = locationService.findAll();
         List<Category> categories = categoryService.listAll();
@@ -145,6 +159,7 @@ public class EventController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String saveEvent(@RequestParam(required = false) Long id,
                             @RequestParam String name,
                             @RequestParam String description,

@@ -1,4 +1,5 @@
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -46,6 +47,8 @@
         </label>
         <input type="submit" value="Search">
         <a th:href="@{/events}">Reset</a>
+        <a class="btn btn-info" th:href="@{/logout}">Logout</a>
+
     </form>
     <br>
 
@@ -65,17 +68,22 @@
                 </label>
 
                 <div style="margin: 10px"></div>
-                <a th:href="@{/events/delete-form/{id}(id=${event.id})}" class="btn btn-danger">Delete</a>
-
+                <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                <a th:href="@{/events/delete-form/{id} (id=${event.id})}" class="btn btn-danger">Delete</a>
+                </th:block>
                 <div style="margin: 10px"></div>
-                <a th:href="@{/events/edit/{id}(id=${event.id})}" class="btn btn-info">Edit</a>
+                <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                <a th:href="@{/events/edit/{id} (id=${event.id})}" class="btn btn-info">Edit</a>
+                </th:block>
             </div>
             <br>
 
+            <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                <div>
+                    <a th:href="@{/events/add-form}" class="btn btn-secondary" style="width: 100%">Add new Event</a>
+                </div>
+            </th:block>
 
-            <div>
-                <a th:href="@{/events/add-form}" class="btn btn-secondary" style="width: 100%">Add new Event</a>
-            </div>
             <br>
 
 
@@ -84,11 +92,8 @@
                 <input type="number" name="numTickets" min="1" required>
             </label>
             <br>
-            <h2>User:</h2>
-            <select id="users" name="userListID">
-                <option th:each="users: ${userList}" th:value="${users.id}"
-                        th:text="${users.name}"></option>
-            </select>
+            <h3>User who is currently logged in:</h3>
+            <input name="username" th:value="${userSignedIn}" readonly>
             <br>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
