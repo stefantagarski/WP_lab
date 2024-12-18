@@ -53,8 +53,6 @@ public class EventController {
         List<Location> locations = locationService.findAll();
         model.addAttribute("locations", locations);
 
-        //List<User> userList = userService.listAll();
-        //model.addAttribute("userList", userList);
 
         String username = req.getRemoteUser();
         model.addAttribute("userSignedIn", username);

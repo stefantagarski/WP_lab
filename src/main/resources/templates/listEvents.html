@@ -70,9 +70,7 @@
                 <div style="margin: 10px"></div>
                 <th:block sec:authorize="hasRole('ROLE_ADMIN')">
                 <a th:href="@{/events/delete-form/{id} (id=${event.id})}" class="btn btn-danger">Delete</a>
-                </th:block>
                 <div style="margin: 10px"></div>
-                <th:block sec:authorize="hasRole('ROLE_ADMIN')">
                 <a th:href="@{/events/edit/{id} (id=${event.id})}" class="btn btn-info">Edit</a>
                 </th:block>
             </div>
