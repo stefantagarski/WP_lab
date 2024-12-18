@@ -29,9 +29,9 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for the H2 console
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/home", "/assets/**", "/register")
+                        .requestMatchers("/h2", "/h2-console/**")
                         .permitAll()
                         .requestMatchers("/admin/**", "/events/add-form", "/events/add", "events/edit/**",
                                 "events/delete/**")
@@ -39,6 +39,7 @@ public class WebSecurityConfig {
                         .anyRequest()
                         .authenticated()
                 )
+                .headers(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .formLogin((form) -> form
                         .loginPage("/login")
@@ -59,6 +60,7 @@ public class WebSecurityConfig {
 
         return http.build();
     }
+
 
     @Bean
     public UserDetailsService userDetailsService() {
